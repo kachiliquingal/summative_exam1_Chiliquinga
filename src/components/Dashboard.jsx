@@ -1,21 +1,35 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { 
-  Paper, Typography, TextField, Table, TableBody, TableCell, 
-  TableContainer, TableHead, TableRow, Avatar, Chip, CircularProgress, 
-  Alert, Stack, Pagination, Button, Box
-} from '@mui/material';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom';
-import { fetchCharacters } from '../api/rickMortyApi';
+import React, { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Paper,
+  Typography,
+  TextField,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Avatar,
+  Chip,
+  CircularProgress,
+  Alert,
+  Stack,
+  Pagination,
+  Button,
+  Box,
+} from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
+import { fetchCharacters } from "../api/rickMortyApi";
 
 export const Dashboard = () => {
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['characters', page, search],
+    queryKey: ["characters", page, search],
     queryFn: () => fetchCharacters({ page, name: search }),
   });
 
@@ -23,18 +37,29 @@ export const Dashboard = () => {
   const totalPages = data?.info?.pages || 0;
 
   const handleLogout = () => {
-    navigate('/');
+    navigate("/");
   };
 
-  if (isLoading) return <CircularProgress sx={{ display: 'block', mx: 'auto', mt: 5 }} />;
+  if (isLoading)
+    return <CircularProgress sx={{ display: "block", mx: "auto", mt: 5 }} />;
   if (isError) return <Alert severity="error">Error de conexión</Alert>;
 
   return (
     <Box sx={{ p: 3 }}>
-      <Paper sx={{ p: 3, maxWidth: 1000, mx: 'auto' }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
+      <Paper sx={{ p: 3, maxWidth: 1000, mx: "auto" }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={3}
+        >
           <Typography variant="h5">Personajes de Rick & Morty</Typography>
-          <Button variant="outlined" color="error" startIcon={<LogoutIcon />} onClick={handleLogout}>
+          <Button
+            variant="outlined"
+            color="error"
+            startIcon={<LogoutIcon />}
+            onClick={handleLogout}
+          >
             Salir
           </Button>
         </Stack>
@@ -52,9 +77,11 @@ export const Dashboard = () => {
           }}
         />
 
-        <TableContainer sx={{ border: '1px solid #e0e0e0', borderRadius: 1, mb: 3 }}>
+        <TableContainer
+          sx={{ border: "1px solid #e0e0e0", borderRadius: 1, mb: 3 }}
+        >
           <Table>
-            <TableHead sx={{ bgcolor: '#f5f5f5' }}>
+            <TableHead sx={{ bgcolor: "#f5f5f5" }}>
               <TableRow>
                 <TableCell>Avatar</TableCell>
                 <TableCell>Nombre</TableCell>
@@ -64,7 +91,11 @@ export const Dashboard = () => {
             </TableHead>
             <TableBody>
               {characters.length === 0 ? (
-                <TableRow><TableCell colSpan={4} align="center">Sin resultados</TableCell></TableRow>
+                <TableRow>
+                  <TableCell colSpan={4} align="center">
+                    Sin resultados
+                  </TableCell>
+                </TableRow>
               ) : (
                 characters.map((char) => (
                   <TableRow key={char.id} hover>
@@ -74,10 +105,16 @@ export const Dashboard = () => {
                     <TableCell>{char.name}</TableCell>
                     <TableCell>{char.species}</TableCell>
                     <TableCell>
-                      <Chip 
-                        label={char.status} 
+                      <Chip
+                        label={char.status}
                         size="small"
-                        color={char.status === 'Alive' ? 'success' : char.status === 'Dead' ? 'error' : 'default'}
+                        color={
+                          char.status === "Alive"
+                            ? "success"
+                            : char.status === "Dead"
+                            ? "error"
+                            : "default"
+                        }
                       />
                     </TableCell>
                   </TableRow>
@@ -88,12 +125,12 @@ export const Dashboard = () => {
         </TableContainer>
 
         <Stack spacing={2} alignItems="center">
-          <Pagination 
-            count={totalPages} 
-            page={page} 
-            onChange={(e, value) => setPage(value)} 
-            color="primary" 
-            showFirstButton 
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={(e, value) => setPage(value)}
+            color="primary"
+            showFirstButton
             showLastButton
           />
         </Stack>
